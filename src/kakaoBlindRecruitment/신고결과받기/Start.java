@@ -1,4 +1,4 @@
-package KakaoBlindRercruitMent.신고결과받기;
+package kakaoBlindRecruitment.신고결과받기;
 
 public class Start {
     public static void main(String[] args) {

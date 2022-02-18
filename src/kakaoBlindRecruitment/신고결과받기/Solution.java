@@ -1,4 +1,4 @@
-package KakaoBlindRercruitMent.신고결과받기;
+package kakaoBlindRecruitment.신고결과받기;
 
 import java.util.*;
 
