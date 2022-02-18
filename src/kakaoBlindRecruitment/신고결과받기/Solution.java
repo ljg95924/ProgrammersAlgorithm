@@ -14,7 +14,7 @@ class Solution {
             신고한자 = temp[0];
             신고받은자 = temp[1];
             if (map.containsKey(신고받은자)) {   // map에 이미 신고받은사람이 있을 경우
-                if (map.get(신고받은자).indexOf(신고한자)==-1) // 중복신고 방지
+                if (map.get(신고받은자).indexOf(신고한자) == -1) // 중복신고 방지
                     map.get(신고받은자).add(신고한자);
             } else { // 첫 신고받은자일 경우
                 List list = new ArrayList();
@@ -29,7 +29,7 @@ class Solution {
             if (map.get(key).size() >= k) {
                 for (int i = 0; i < id_list.length; i++) {
                     if (map.get(key).contains(id_list[i])) {
-                        answer[i] +=1;
+                        answer[i] += 1;
                     }
                 }
             }

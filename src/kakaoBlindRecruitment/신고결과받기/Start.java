@@ -8,8 +8,8 @@ public class Start {
         String[] report2 = new String[]{"ryan con", "ryan con", "ryan con", "ryan con"};
         int k = 2;
         int[] a = solution.solution(id_list, report, 2);
-        for (int b:a
-             ) {
+        for (int b : a
+        ) {
             System.out.println(b);
         }
 
