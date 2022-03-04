@@ -3,7 +3,7 @@ package kakaoBlindRecruitment.추석트래픽;
 public class Start {
     public static void main(String[] args) {
         Solution solution = new Solution();
-        String[] lines = {
+        String[][] lines = {{
                 "2016-09-15 20:59:57.421 0.351s",
                 "2016-09-15 20:59:58.233 1.181s",
                 "2016-09-15 20:59:58.299 0.8s",
@@ -13,9 +13,18 @@ public class Start {
                 "2016-09-15 21:00:00.741 1.581s",
                 "2016-09-15 21:00:00.748 2.31s",
                 "2016-09-15 21:00:00.966 0.381s",
-                "2016-09-15 21:00:02.066 2.62s"};
-       // System.out.println(solution.solution(lines));
-        String[] lines1 ={"2016-09-15 00:00:00.000 3s"};
-        System.out.println(solution.solution(lines1));
+                "2016-09-15 21:00:02.066 2.62s"},
+                {"2016-09-15 00:00:00.000 3s"},
+                {"2016-09-15 23:59:59.999 0.001s"},
+                {"2016-09-15 01:00:04.001 2.0s", "2016-09-15 01:00:07.000 2s"},
+                {"2016-09-15 01:00:04.002 2.0s", "2016-09-15 01:00:07.000 2s"},
+                {"2016-09-15 00:00:00.000 2.3s", "2016-09-15 23:59:59.999 0.1s"}}; //땡 2->1
+
+        //System.out.println(solution.solution(lines[3]));
+        // 7,1,1,1,2,1
+        for (String[] line: lines
+        ) {
+            System.out.println(solution.solution(line));
+        }
     }
 }
