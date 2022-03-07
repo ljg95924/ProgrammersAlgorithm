@@ -1,15 +1,33 @@
 package kakaoBlindRecruitment.추석트래픽;
 
 import java.time.LocalTime;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Solution {
+    public class TimeInfo {
+        private LocalTime startTime;
+        private LocalTime endTime;
+
+        TimeInfo(LocalTime endTime, LocalTime startTime) {
+            this.endTime = endTime;
+            this.startTime = startTime;
+        }
+
+        public LocalTime getEndTime() {
+            return endTime;
+        }
+
+        public LocalTime getStartTime() {
+            return startTime;
+        }
+    }
+
     public int solution(String[] lines) {
         int answer = 0;
-        int count;
-        Map<LocalTime, LocalTime> timeMap = new LinkedHashMap<>(); // <도착시간, 시작시간>
+        int frontCount;
+        int backCount;
+        // Map<LocalTime, LocalTime> timeList = new LinkedHashMap<>(); // <도착시간, 시작시간>
+        List<TimeInfo> timeList = new ArrayList<>();
 
         if (lines.length == 1) return 1;
 
@@ -24,44 +42,57 @@ public class Solution {
                 info[2] = info[2] + "00";
             }
 
-            LocalTime keyLocalTime = LocalTime.of(
+            LocalTime localEndTime = LocalTime.of(
                     Integer.parseInt(time[0]), Integer.parseInt(time[1]), Integer.parseInt(time[2]), Integer.parseInt(time[3]) * 1000000);
 
-            LocalTime valueLocalTime = keyLocalTime.minusSeconds(Long.parseLong(info[2].substring(0, 1)));
+            LocalTime localStartTime = localEndTime.minusSeconds(Long.parseLong(info[2].substring(0, 1)));
             if (info[2].length() != 1) {
-                valueLocalTime = valueLocalTime.minusNanos(Long.parseLong(info[2].substring(2)) * 1000000);
+                localStartTime = localStartTime.minusNanos(Long.parseLong(info[2].substring(2)) * 1000000);
             }
-
-            timeMap.put(keyLocalTime, valueLocalTime.plusNanos(1000000));
+            timeList.add(new TimeInfo(localEndTime, localStartTime.plusNanos(1000000)));
 
         }
 
 
-        Iterator<LocalTime> iterator = timeMap.keySet().iterator();
-        while (iterator.hasNext()) {
-            count = 1;
-            LocalTime localTime = iterator.next(); //.minusNanos(timeMap.get(localTime));;
+        Iterator<TimeInfo> standardIterator = timeList.iterator();
+        while (standardIterator.hasNext()) {
+            frontCount = 1;
+            backCount = 1;
+            TimeInfo standardTimeInfo = standardIterator.next(); //.minusNanos(timeList.get(standardTimeInfo));;
 
-            Iterator<LocalTime> compareIterator = timeMap.keySet().iterator();
+            Iterator<TimeInfo> compareIterator = timeList.iterator();
             while (compareIterator.hasNext()) {
-                LocalTime compareLocalTime = compareIterator.next();
-                if(localTime == compareLocalTime) continue;
-                //기준시간이 localTime 이고 localTime+1초간이 카운트 구간.
-                // 그러면 3개의 경우가있다.
+                TimeInfo compareTimeInfo = compareIterator.next();
+                if (standardTimeInfo == compareTimeInfo) continue;
+                //기준시간이 각 로그가 끝나는 시간(standardTimeInfo) 이고 standardTimeInfo+1초간이 카운트 구간일 경우
+                // 다음과 같은 경우의 수가있다.
                 // 1. 기준시간보다 비교끝시간이 뒤에있으면서 비교시작시간이 기준시간보다 앞에있을때
-                // 2. 기준시간보다 비교시작시간이 앞에있으면서 기준시간+1보다 비교끝시간이 뒤에있을때
-                // 3. 기준시간+1보다 비교시작시간이 앞에있으면서 기준시간+1보다 비교끝시간이 뒤에있을떄
-                if (
-                        localTime.isBefore(compareLocalTime) && timeMap.get(compareLocalTime).isBefore(localTime) ||
-                                localTime.isAfter(timeMap.get(compareLocalTime)) && localTime.plusSeconds(1).isBefore(compareLocalTime) ||
-                                localTime.plusSeconds(1).isAfter(timeMap.get(compareLocalTime)) && localTime.plusSeconds(1).isBefore(compareLocalTime)) {
-                   // System.out.println("original: " + localTime + " " + timeMap.get(localTime));
-                   // System.out.println("compare: " + compareLocalTime + " " + timeMap.get(compareLocalTime));
-                    count++;
-                }
+                // 2. 기준시간+1보다 비교시작시간이 앞에있으면서 기준시간+1보다 비교끝시간이 뒤에있을떄
+                // 3. 비교시작시간이 기준시간보다 뒤에있으며 기준시간+1보다 비교끝시간이 앞에 있을경우
+                // 4. 기준시간이 비교도착시간이랑 같을경우.
+                // 5. 기준시간+1이 비교시작시간이랑 같을경우.
 
+                if (
+                        standardTimeInfo.getEndTime().isBefore(compareTimeInfo.getEndTime()) && compareTimeInfo.getStartTime().isBefore(standardTimeInfo.getEndTime()) ||
+                                standardTimeInfo.getEndTime().plusSeconds(1).isAfter(compareTimeInfo.getStartTime()) && standardTimeInfo.getEndTime().plusSeconds(1).isBefore(compareTimeInfo.getEndTime()) ||
+                                standardTimeInfo.getEndTime().isBefore(compareTimeInfo.getStartTime()) && standardTimeInfo.getEndTime().plusSeconds(1).isAfter(compareTimeInfo.getEndTime()) ||
+                                standardTimeInfo.getStartTime() == compareTimeInfo.getEndTime() ||
+                                standardTimeInfo.getStartTime().plusSeconds(1) == compareTimeInfo.getStartTime()
+
+                ) {
+                    backCount++;
+                }
+                // 기준시간이 각 로그가 시작하는 시간(standardTimeInfo.get(standardTimeInfo))일 경우
+/*                if (
+                        timeList.get(standardTimeInfo).isBefore(compareTimeInfo) && timeList.get(compareTimeInfo).isBefore(timeList.get(standardTimeInfo)) ||
+                                timeList.get(standardTimeInfo).plusSeconds(1).isAfter(timeList.get(compareTimeInfo)) && timeList.get(standardTimeInfo).plusSeconds(1).isBefore(compareTimeInfo) ||
+                                timeList.get(standardTimeInfo).isBefore(timeList.get(compareTimeInfo)) && timeList.get(standardTimeInfo).plusSeconds(1).isAfter(compareTimeInfo) ||
+                                standardTimeInfo == timeList.get(compareTimeInfo)) {
+                    frontCount++;
+                }*/
             }
-            if (count > answer) answer = count;
+            if (backCount >= frontCount && backCount > answer) answer = backCount;
+            if (backCount < frontCount && frontCount > answer) answer = frontCount;
         }
         return answer;
     }
