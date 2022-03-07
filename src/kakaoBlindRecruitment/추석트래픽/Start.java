@@ -18,10 +18,11 @@ public class Start {
                 {"2016-09-15 23:59:59.999 0.001s"},
                 {"2016-09-15 01:00:04.001 2.0s", "2016-09-15 01:00:07.000 2s"},
                 {"2016-09-15 01:00:04.002 2.0s", "2016-09-15 01:00:07.000 2s"},
-                {"2016-09-15 00:00:00.000 2.3s", "2016-09-15 23:59:59.999 0.1s"}}; //땡 2->1
+                {"2016-09-15 00:00:00.000 2.3s", "2016-09-15 23:59:59.999 0.1s"},};
 
-        //System.out.println(solution.solution(lines[3]));
+//        System.out.println(solution.solution(lines[6]));
         // 7,1,1,1,2,1
+
         for (String[] line: lines
         ) {
             System.out.println(solution.solution(line));
