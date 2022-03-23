@@ -1,21 +1,16 @@
 package 연습문제.짝지어제거하기;
 
+import java.util.Stack;
+
 class Solution {
     public int solution(String s) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(s);
-        boolean flag = true;
-        while (flag) {
-            flag = false;
-            for (int i = 0; i < sb.length() - 1; i++) {
-                if (sb.charAt(i) == sb.charAt(i + 1)) {
-                    sb.delete(i, i + 2);
-                    flag = true;
-                }
-            }
+        Stack<Character> stack = new Stack();
+        stack.add(s.charAt(0));
+        for (int i = 1; i < s.length(); i++) {
+            if (!stack.isEmpty() && stack.peek() == s.charAt(i)) stack.pop();
+            else stack.add(s.charAt(i));
         }
-        if (sb.isEmpty()) return 1;
-
+        if (stack.isEmpty()) return 1;
         return 0;
     }
 }
